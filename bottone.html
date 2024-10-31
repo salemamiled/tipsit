@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bottoni Stilizzati</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .button {
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button1 {
+            background-color: #000000;
+        }
+        .button1:hover {
+            background-color: #2980b9;
+        }
+        .button2 {
+            background-color: #000000;
+        }
+        .button2:hover {
+            background-color: #c0392b;
+        }
+        .button3 {
+            background-color: #000000;
+        }
+        .button3:hover {
+            background-color: #ff7b00;
+        }
+    </style>
+</head>
+<body>
+    <button class="button button1" onclick="mostraAlert()">Bottone 1</button>
+    <button class="button button2" onclick="mostraAlert2()">Bottone 2</button>
+    <button class="button button3" onclick="mostraAalert3()">Bottone 3</button>
+
+    <script>
+        function mostraAlert() {
+            alert("salve sono il re!");
+        }
+
+        function mostraAlert2() {
+            alert("salve sono il re!");
+        }
+
+        function mostraAlert3() {
+            alert("salve sono il re!");
+        }
+    </script>
+</body>
+</html>
