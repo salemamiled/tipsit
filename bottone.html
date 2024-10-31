@@ -42,21 +42,29 @@
     </style>
 </head>
 <body>
-    <button class="button button1" onclick="mostraAlert()">Bottone 1</button>
+    
+    <button class="button button1" onclick="mostraAlert()">Bottone 1</button> 
+    <input type="text" id="primomioinput">
     <button class="button button2" onclick="mostraAlert2()">Bottone 2</button>
+    <input type="text" id="secondomioinput">
     <button class="button button3" onclick="mostraAalert3()">Bottone 3</button>
+    <input type="text" id="terzomioinput">
+
 
     <script>
-        function mostraAlert() {
-            alert("salve sono il re!");
+        function mostraAlert(){
+            let m=document.getElemntbyId("primomioinput").value;
+            alert("salve sono il re!"+m);
         }
 
-        function mostraAlert2() {
-            alert("salve sono il re!");
+        function mostraAlert2(){
+            let z=document.getElemntbyId("secondomioinput").value;
+            alert("salve sono il re!"+z);
         }
 
-        function mostraAlert3() {
-            alert("salve sono il re!");
+        function mostraAlert3(){
+            let a=document.getElemntbyId("terzomioinput").value;
+            alert("salve sono il re!"+a);
         }
     </script>
 </body>
