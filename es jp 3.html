@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aforismi di Scienziati</title>
+</head>
+<body>
+  
+  <div id="aforisma1">
+    <p>"La scienza è il grande antidoto al veleno dell'entusiasmo e della superstizione." – Adam Smith</p>
+    <button onclick="nascondiTesto('aforisma1')">Nascondi Testo</button>
+  </div>
+  
+  <div id="aforisma2">
+    <p>"Non è importante avere sempre ragione, ma non smettere mai di cercare la verità." – Richard Feynman</p>
+    <button onclick="nascondiTesto('aforisma2')">Nascondi Testo</button>
+  </div>
+  
+  <div id="aforisma3">
+    <p>"È strano che solo uomini straordinari fanno le scoperte, che poi sembrano così facili e semplici." – Georg C. Lichtenberg</p>
+    <button onclick="nascondiTesto('aforisma3')">Nascondi Testo</button>
+  </div>
+  
+  <div id="aforisma4">
+    <p>"La misura dell'intelligenza è la capacità di cambiare." – Albert Einstein</p>
+    <button onclick="nascondiTesto('aforisma4')">Nascondi Testo</button>
+  </div>
+  
+  <div id="aforisma5">
+    <p>"La scienza non è nient'altro che buon senso addestrato e organizzato." – Thomas Huxley</p>
+    <button onclick="nascondiTesto('aforisma5')">Nascondi Testo</button>
+  </div>
+
+  <script>
+    function nascondiTesto(id) {
+      const elemento = document.getElementById(id);
+      elemento.style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
