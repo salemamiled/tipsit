@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatore Decrementale con Immagine di Conan</title>
+    <style>
+        /* CSS per il layout */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+        #countdown {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        #imageContainer {
+            display: none; /* L'immagine è nascosta inizialmente */
+            margin-top: 20px;
+        }
+        #imageContainer img {
+            width: 300px;
+            height: auto;
+            border-radius: 8px;
+        }
+        #message {
+            font-size: 1.5rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="message">Partenza tra...</div> <!-- Messaggio iniziale -->
+    <div id="countdown">3</div> <!-- Countdown -->
+    <div id="imageContainer">
+        <!-- Immagine di Conan Edogawa -->
+        <img src="FOTO.CONAN.PNG" alt="Conan Edogawa">
+    </div>
+</div>
+
+<script>
+    var countdownValue = 3;
+    var countdownElement = document.getElementById('countdown');
+    var imageContainer = document.getElementById('imageContainer');
+    var messageElement = document.getElementById('message');
+
+    function updateCountdown() {
+        countdownValue--;
+        countdownElement.textContent = countdownValue > 0 ? countdownValue : 0;
+        
+        if (countdownValue <= 0) {
+            messageElement.textContent = "Immagine pronta!";
+            imageContainer.style.display = 'block';
+        } else {
+            setTimeout(updateCountdown, 1000);
+        }
+    }
+
+    setTimeout(updateCountdown, 1000); // Avvia il countdown
+</script>
+
+</body>
+</html>
