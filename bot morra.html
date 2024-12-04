@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morra Cinese</title>
+    <style>
+        
+        .choice {
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        #out1 {
+            font-size: 20px;
+            font-weight: bold;
+            color: green;
+        }
+
+        #out2 {
+            font-size: large;
+            color: brown;
+        }
+
+        #score {
+            font-size: 18px;
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="dropdown">
+        <button class="dropbtn">lancia
+          <i class="fa fa-caret-down"></i>
+        </button>
+    </div>
+
+    <h1>Gioca a Morra Cinese</h1>
+
+    
+    <img id="sasso" class="choice" src="sasso.png" alt="Sasso">
+    <img id="carta" class="choice" src="carta.png" alt="Carta">
+    <img id="forbice" class="choice" src="forbice.png" alt="Forbice">
+
+    <p id="out1"></p>
+    <p id="out2"></p>
+    <p id="score"></p>
+
+    <script>
+        
+        let morra = ["sasso", "carta", "forbice"];
+        let playerChoice = "";
+        let botChoice = "";
+        let playerScore = 0;
+        let botScore = 0;
+
+        
+        function morraScore(player, bot) {
+            if (player === bot) {
+                return "Pareggio!";
+            } else if (
+                (player === "sasso" && bot === "forbice") ||
+                (player === "carta" && bot === "sasso") ||
+                (player === "forbice" && bot === "carta")
+            ) {
+                playerScore++;
+                return "Hai vinto!";
+            } else {
+                botScore++;
+                return "Hai perso!";
+            }
+        }
+
+        
+        function getBotChoice() {
+            let numeroCasuale = Math.floor(Math.random() * 3);
+            return morra[numeroCasuale];
+        }
+
+        
+        function displayScore() {
+            document.getElementById("score").innerHTML = `Punteggio: Tu - ${playerScore} | Bot - ${botScore}`;
+        }
+
+    
+        function playerMakesChoice(choice) {
+            playerChoice = choice;
+            botChoice = getBotChoice();
+
+            let result = morraScore(playerChoice, botChoice);
+            //document.getElementById("out1").innerHTML = `La tua scelta: ${getBotChoice}`;
+            document.getElementById("out2").innerHTML = `La scelta del bot: ${botChoice}`;
+            document.getElementById("score").innerHTML = `Punteggio: Tu - ${playerScore} | Bot - ${botScore}`;
+            document.getElementById("out2").innerHTML += `<br>${result}`;
+        }
+
+        
+        document.getElementById("sasso").addEventListener("click", function() {
+            playerMakesChoice("sasso");
+        });
+
+        document.getElementById("carta").addEventListener("click", function() {
+            playerMakesChoice("carta");
+        });
+
+        document.getElementById("forbice").addEventListener("click", function() {
+            playerMakesChoice("forbice");
+        });
+    </script>
+
+</body>
+</html>
