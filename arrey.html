@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array Esercizio 1</title>
+    <style>
+         body{
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #d46d27; /* Light blue background - default color, will change dynamically */
+         }
+
+
+        
+
+        #container {
+            height: 200px;
+            width: 500px;
+            overflow-y: scroll; /* Add scroll if the content overflows */
+            border: 2px solid #ccc;
+            padding: 10px;
+            background-color: #f4f4f9; /* Light grey background for the container */
+            border-radius: 10px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        h1 {
+            color: #0066cc; /* Dark blue for the title */
+        }
+        #score {
+            font-size: 18px;
+            font-weight: bold;
+            color: blue;}
+    </style>
+</head>
+<body>
+
+    <h1>Array Esercizio 1</h1>
+
+    <p>Lista di 100 numeri casuali:</p>
+
+    <div id="container">
+        <p id="out1"></p>
+    </div>
+
+    <script>
+        
+        let numeri = [];
+
+        
+        function riempiArrayConNumeriCasuali() {
+            for (let i = 0; i < 100; i++) {
+                
+                numeri[i] = Math.floor(Math.random() * 100);
+            }
+        }
+
+        
+        riempiArrayConNumeriCasuali();
+
+        
+        document.getElementById("out1").innerHTML = numeri.join(', '); 
+    </script>
+
+</body>
+</html
