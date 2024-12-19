@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizzatore Casual</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background:linear-gradient(to right, #00aeffca,#ffffff00);
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            color: #4CAF50;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color:rgb(247, 247, 247);
+            color: rgb(247, 247, 247);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color:linear-gradient(to right, #000000,#000000);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Temporizzatore Casual</h1>
+    <button id="startButton">Inizia</button>
+    <div id="output"></div>
+
+    <script>
+        function isPrime(num) {
+            if (num <= 1) return false;
+            for (let i = 2; i <= Math.sqrt(num); i++) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 1000) + 1;
+        }
+
+        function displayNumberInfo(number) {
+            let output = `<strong>Numero:</strong> ${number}<br>`;
+            output += `<strong>Pari:</strong> ${number % 2 === 0 ? 'Sì' : 'No'}<br>`;
+            output += `<strong>Dispari:</strong> ${number % 2 !== 0 ? 'Sì' : 'No'}<br>`;
+            output += `<strong>Primo:</strong> ${isPrime(number) ? 'Sì' : 'No'}<br>`;
+            output += `<strong>Doppio:</strong> ${number * 2}<br>`;
+            output += `<strong>Meta:</strong> ${Math.floor(number / 2)}<br>`;
+            output += `<strong>Complemento:</strong> ${1000 - number}<br>`;
+            output += `<strong>Somma con precedente e successivo:</strong> ${number - 1 + number + number + 1}<br>`;
+            output += `<strong>Moltiplicato per 3.14:</strong> ${(number * 3.14).toFixed(2)}<br>`;
+            document.getElementById('output').innerHTML = output;
+        }
+
+        let timer;
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            clearInterval(timer); // Ferma eventuali timer precedenti
+            timer = setInterval(() => {
+                const randomNumber = generateRandomNumber();
+                displayNumberInfo(randomNumber);
+            },1000 );
+        });
+    </script>
+</body>
+</html>
