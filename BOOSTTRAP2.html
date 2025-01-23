@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASTERCARD VISA</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to bottom, #1408ef, #00aaff);
+        color: #333;
+    }
+    
+    .navbar {
+        background: #4c4cff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand, .nav-link {
+        color: #fff !important;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+    
+    .nav-link:hover {
+        color: #f0f8ff !important;
+    }
+   
+    .bg-primary {
+        background: #0066ff !important;
+    }
+    
+    .bg-success {
+        background: #28a745 !important;
+    }
+    
+    .bg-danger {
+        background: #dc3545 !important;
+    }
+ 
+    .card {
+        border: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s;
+    }
+    
+    .card:hover {
+        transform: scale(1.05);
+    }
+    
+   
+    .btn {
+        border-radius: 30px;
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+        transform: translateY(-3px);
+    }
+    
+    .btn-secondary:hover {
+        background: #6c757d;
+        transform: translateY(-3px);
+    }
+    
+  
+    .form-control {
+        border: 2px solid #ced4da;
+        border-radius: 20px;
+        padding: 10px 15px;
+    }
+    
+    .form-control:focus {
+        border-color: #4c4cff;
+        box-shadow: 0 0 5px rgba(76, 76, 255, 0.5);
+    }
+    
+    button[type="submit"] {
+        border-radius: 20px;
+        font-weight: bold;
+    }
+    
+   
+    footer {
+        background: #333;
+        color: #fff;
+        text-align: center;
+        padding: 10px 0;
+        margin-top: 30px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 bg-primary text-white text-center p-3">blocco 1</div>
+            <div class="col-lg-4 col-md-6 col-sm-12 bg-success text-white text-center p-3">blocco 2</div>
+            <div class="col-lg-4 col-md-12 col-sm-12 bg-danger text-white text-center p-3">blocco 3</div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h2>MASTERCARD VISA </h2>
+
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+        </div>
+
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+            <div class="col-md-6">
+                <div class="p-3 mb-3 border bg-light"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Logo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Servizi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contatti</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <h2>clicca uno di questi bottoni per proseguire dove vuoi </h2>
+        <button class="btn btn-primary">Primario</button>
+        <a href="#" class="btn btn-primary" onclick="window.open('https://tech.everyeye.it/notizie/come-guadagnare-1-milione-euro-secondo-matematica-716619.html',' _blank'); window.open('https://www.alfiobardolla.com/blog/come-diventare-ricchi-velocemente/', '_blank'); return false;"></a>
+        <button class="btn btn-secondary">Secondario</button>
+        <a href="#" class="btn btn-primary" onclick="window.open('https://www.guidapsicologi.it/articoli/le-principali-tecniche-di-manipolazione',' _blank'); window.open('https://www.gqitalia.it/lifestyle/article/come-diventare-piu-intelligenti-essere-felici-avere-successo', '_blank'); return false;"></a>
+    </div>
+
+   
+    <div class="container mt-5">
+        <h2>Prova il Componente Card</h2>
+        <div class="card" style="width: 18rem;">
+            <img src="https://cdn.origo.hu/2023/12/xmPdmRwZDXhY_yVCjVIDkQ1lkkabijerg2GixOKuXy4/fill/1347/758/no/1/aHR0cHM6Ly9jbXNjZG4uYXBwLmNvbnRlbnQucHJpdmF0ZS9jb250ZW50LzUwZDI3NDUyZmQ1ZTQ1ZTZiYzVjNzJkY2ZmMzZhOWQ5.webp" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Titolo della Card</h5>
+                <p class="card-text">SE VUOI ANCHE TU DELLE CARTE COSI CHE TI PERMETTONO DI STARE AL SICURO E SONO ANCHE MOLTO EFFICACI E EFFICENTI VISITA IL NOSTRO SITO  </p>
+                <a href="#" class="btn btn-primary"onclick>clicca qui </a>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card h-100">
+            <img src="https://cdn.fastly.steamstatic.com/store/home/store_home_share.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card giochi</h5>
+              <p class="card-text">qui troverai un bell po di giochi</p>
+              <a href="#" class="btn btn-primary" onclick="window.open('https://store.steampowered.com/?l=italian',' _blank'); window.open('https://www.g2a.com/it/', '_blank');  return false;">clicca qui </a>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary"></small>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <img src="https://www.cia-france.it/media/1492/les-films-incontournables-du-cinema-w_2524x884.jpg" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card film</h5>
+              <p class="card-text">qui troverai un bell po di film </p>
+              <a href="#" class="btn btn-primary" onclick="window.open('https://streamingcommunity.camera/',' _blank'); window.open('https://www.netflix.com/it/', '_blank');   return false;">clicca qui </a>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary"></small>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card h-100">
+            <img src="https://i0.wp.com/www.yugatech.com/wp-content/uploads/2021/04/Anime-streaming-comparo_2.png?resize=720,405&quality=80&ssl=1" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">Card anime</h5>
+              <p class="card-text">qui troverai un bell po di anime </p>
+              <a href="#" class="btn btn-primary" onclick="window.open('https://www.animeworld.so/?d=1',' _blank'); window.open('https://www.animeunity.so/', '_blank');  return false;">clicca qui </a>
+            </div>
+            <div class="card-footer">
+              <small class="text-body-secondary"></small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="container mt-5">
+        <form>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Indirizzo Email</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">Non condivideremo mai il tuo email con altri.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1">
+            </div>
+            <button type="submit" class="btn btn-primary">Invia</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
