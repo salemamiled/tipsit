@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esercizio Stringhe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"] {
+            padding: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Esercizio Stringhe</h1>
+    <form id="stringForm">
+        <label for="stringA">Stringa A:</label>
+        <input type="text" id="stringA" name="stringA"><br><br>
+        <label for="stringB">Stringa B:</label>
+        <input type="text" id="stringB" name="stringB"><br><br>
+        <button type="button" onclick="processStrings()">Calcola</button>
+    </form>
+
+    <div id="output"></div>
+    <script>
+        function processStrings() {
+            const stringA = document.getElementById('stringA').value;
+            const stringB = document.getElementById('stringB').value;
+
+            const lengthA = stringLength(stringA);
+            const lengthB = stringLength(stringB);
+
+            const reversedA = reverseString(stringA);
+            const reversedB = reverseString(stringB);
+
+            const concatenated = concatenateStrings(stringA, stringB);
+
+            const sumLengths = sumStringLengths(stringA, stringB);
+            const lengthCheck = checkStringBLength(stringB);
+
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = `
+                <p>Lunghezza di A: ${lengthA}</p>
+                <p>Lunghezza di B: ${lengthB}</p>
+                <p>Stringa A al contrario: ${reversedA}</p>
+                <p>Stringa B al contrario: ${reversedB}</p>
+                <p>Stringhe unite: ${concatenated}</p>
+                <p>Somma delle lunghezze: ${sumLengths}</p>
+                <p>${lengthCheck}</p>
+            `;
+        }
+
+        function stringLength(str) {
+            return str.length;
+        }
+
+        function reverseString(str) {
+            return str.split('').reverse().join('');
+        }
+
+        function concatenateStrings(str1, str2) {
+            return str1 + str2;
+        }
+
+        function sumStringLengths(str1, str2) {
+            return str1.length + str2.length;
+        }
+        
+        function checkStringBLength(str) {
+            if (str.length > 20) {
+                return "La stringa B è troppo lunga!";
+            } else {
+                return "La stringa B è di lunghezza accettabile.";
+            }
+        }
+    </script>
+</body>
+</html>
