@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Click Challenge</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            transition: background-color 0.5s;
+        }
+        
+        #gameArea {
+            position: relative;
+            height: 70vh;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .target {
+            position: absolute;
+            border-radius: 50%;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            transition: transform 0.2s;
+        }
+        
+        .target:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        
+        .target:active {
+            transform: translate(-50%, -50%) scale(0.9);
+        }
+        
+        .level-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        
+        .combo-counter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: none;
+        }
+        
+        .combo-active {
+            animation: pulse 0.5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); }
+            to { box-shadow: 0 0 20px rgba(255, 255, 255, 0.9); }
+        }
+        
+        #customizationModal .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        #customizationModal .color-option.selected {
+            border-color: #000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Schermata di registrazione -->
+    <div id="registrationScreen" class="container d-flex flex-column justify-content-center align-items-center vh-100">
+        <div class="card p-4" style="max-width: 500px; width: 100%;">
+            <h1 class="text-center mb-4">Speed Click Challenge</h1>
+            <form id="playerForm">
+                <div class="mb-3">
+                    <label for="playerName" class="form-label">Nome Giocatore</label>
+                    <input type="text" class="form-control" id="playerName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="playerEmail" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="playerEmail" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Inizia a Giocare</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Schermata di gioco -->
+    <div id="gameScreen" class="container d-none">
+        <div class="row mt-3">
+            <div class="col-12">
+                <button id="customizeBtn" class="btn btn-sm btn-outline-secondary">Personalizza</button>
+                <span id="clickCounter" class="badge bg-primary float-end">Click: 0/10</span>
+            </div>
+        </div>
+        <div id="gameArea" class="mt-3">
+            <div class="level-indicator">Livello: <span id="currentLevel">1</span></div>
+            <div class="combo-counter">Combo: <span id="comboValue">0</span>x</div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="progress">
+                    <div id="progressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schermata dei risultati -->
+    <div id="resultsScreen" class="container d-flex flex-column justify-content-center align-items-center vh-100 d-none">
+        <div class="card p-4" style="max-width: 500px; width: 100%;">
+            <h1 class="text-center mb-4">Risultati</h1>
+            <div id="playerInfo" class="mb-3"></div>
+            <div class="mb-3">
+                <p>Tempo totale: <span id="totalTime" class="fw-bold">0</span> ms</p>
+                <p>Media tempi: <span id="averageTime" class="fw-bold">0</span> ms</p>
+                <p>Livello raggiunto: <span id="finalLevel" class="fw-bold">1</span></p>
+                <p>Punteggio: <span id="score" class="fw-bold">0</span></p>
+            </div>
+            <button id="playAgainBtn" class="btn btn-primary w-100">Gioca Ancora</button>
+        </div>
+    </div>
+
+    <!-- Modal per personalizzazione -->
+    <div class="modal fade" id="customizationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Personalizza Gioco</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Sfondo:</h6>
+                    <div>
+                        <div class="color-option selected" style="background-color: #121212;" data-bg="#121212"></div>
+                        <div class="color-option" style="background-color: #1a1a2e;" data-bg="#1a1a2e"></div>
+                        <div class="color-option" style="background-color: #16213e;" data-bg="#16213e"></div>
+                        <div class="color-option" style="background-color: #0f3460;" data-bg="#0f3460"></div>
+                        <div class="color-option" style="background-color: #1b262c;" data-bg="#1b262c"></div>
+                    </div>
+                    
+                    <h6 class="mt-3">Colore bersaglio:</h6>
+                    <div>
+                        <div class="color-option selected" style="background-color: #ffffff;" data-target="#ffffff"></div>
+                        <div class="color-option" style="background-color: #ff9ff3;" data-target="#ff9ff3"></div>
+                        <div class="color-option" style="background-color: #feca57;" data-target="#feca57"></div>
+                        <div class="color-option" style="background-color: #1dd1a1;" data-target="#1dd1a1"></div>
+                        <div class="color-option" style="background-color: #5f27cd;" data-target="#5f27cd"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Variabili di gioco
+        let playerName = "";
+        let playerEmail = "";
+        let clickTimes = [];
+        let gameStarted = false;
+        let targetTimeout;
+        let currentLevel = 1;
+        let comboCount = 0;
+        let lastClickTime = 0;
+        let comboTimeout;
+        let bgColor = "#121212";
+        let targetColor = "#ffffff";
+        
+        // Configurazioni dei livelli
+        const levelConfigs = [
+            { appearDelay: 1500, disappearDelay: 2000, targetSize: 50 },  // Livello 1
+            { appearDelay: 1000, disappearDelay: 1500, targetSize: 45 },  // Livello 2
+            { appearDelay: 800, disappearDelay: 1200, targetSize: 40 },   // Livello 3
+            { appearDelay: 600, disappearDelay: 1000, targetSize: 35 },    // Livello 4
+            { appearDelay: 400, disappearDelay: 800, targetSize: 30 }      // Livello 5
+        ];
+        
+        // Elementi DOM
+        const registrationScreen = document.getElementById('registrationScreen');
+        const gameScreen = document.getElementById('gameScreen');
+        const resultsScreen = document.getElementById('resultsScreen');
+        const playerForm = document.getElementById('playerForm');
+        const clickCounter = document.getElementById('clickCounter');
+        const gameArea = document.getElementById('gameArea');
+        const currentLevelDisplay = document.getElementById('currentLevel');
+        const playerInfo = document.getElementById('playerInfo');
+        const totalTimeDisplay = document.getElementById('totalTime');
+        const averageTimeDisplay = document.getElementById('averageTime');
+        const finalLevelDisplay = document.getElementById('finalLevel');
+        const scoreDisplay = document.getElementById('score');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const customizeBtn = document.getElementById('customizeBtn');
+        const progressBar = document.getElementById('progressBar');
+        const comboCounter = document.querySelector('.combo-counter');
+        const comboValue = document.getElementById('comboValue');
+        
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gestione form registrazione
+            playerForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                playerName = document.getElementById('playerName').value;
+                playerEmail = document.getElementById('playerEmail').value;
+                
+                registrationScreen.classList.add('d-none');
+                gameScreen.classList.remove('d-none');
+                
+                updateBackground();
+                setTimeout(createTarget, 1000);
+            });
+            
+            // Pulsante gioca ancora
+            playAgainBtn.addEventListener('click', function() {
+                resetGame();
+                resultsScreen.classList.add('d-none');
+                gameScreen.classList.remove('d-none');
+                setTimeout(createTarget, 1000);
+            });
+            
+            // Pulsante personalizzazione
+            customizeBtn.addEventListener('click', function() {
+                const modal = new bootstrap.Modal(document.getElementById('customizationModal'));
+                modal.show();
+            });
+            
+            // Gestione selezione colori
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Rimuovi selected da tutti gli elementi dello stesso gruppo
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('.color-option').forEach(el => el.classList.remove('selected'));
+                    
+                    // Aggiungi selected a quello cliccato
+                    this.classList.add('selected');
+                    
+                    // Determina se è un colore di sfondo o del bersaglio
+                    if (parent.previousElementSibling.textContent.includes('Sfondo')) {
+                        bgColor = this.getAttribute('data-bg');
+                        updateBackground();
+                    } else {
+                        targetColor = this.getAttribute('data-target');
+                    }
+                });
+            });
+        });
+        
+        // Funzione per aggiornare lo sfondo
+        function updateBackground() {
+            document.body.style.backgroundColor = bgColor;
+        }
+        
+        // Funzione per creare il bersaglio
+        function createTarget() {
+            if (clickTimes.length >= 10) {
+                endGame();
+                return;
+            }
+            
+            // Cancella eventuali timeout precedenti
+            if (targetTimeout) clearTimeout(targetTimeout);
+            
+            // Rimuovi eventuali bersagli esistenti
+            const existingTarget = document.querySelector('.target');
+            if (existingTarget) existingTarget.remove();
+            
+            // Configurazioni del livello corrente
+            const config = levelConfigs[currentLevel - 1];
+            
+            // Crea nuovo bersaglio
+            const target = document.createElement('div');
+            target.className = 'target';
+            target.style.width = `${config.targetSize}px`;
+            target.style.height = `${config.targetSize}px`;
+            target.style.backgroundColor = targetColor;
+            
+            // Posizione randomica
+            const gameRect = gameArea.getBoundingClientRect();
+            const maxX = gameRect.width - config.targetSize;
+            const maxY = gameRect.height - config.targetSize;
+            
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+            
+            target.style.left = `${x}px`;
+            target.style.top = `${y}px`;
+            
+            // Gestione click
+            target.addEventListener('click', function(e) {
+                e.stopPropagation();
+                handleTargetClick();
+                this.remove();
+            });
+            
+            // Aggiungi al game area
+            gameArea.appendChild(target);
+            
+            // Imposta scomparsa automatica
+            targetTimeout = setTimeout(() => {
+                target.remove();
+                handleMissedTarget();
+            }, config.disappearDelay);
+            
+            // Aggiorna contatore combo
+            updateCombo(false);
+        }
+        
+        // Gestione click sul bersaglio
+        function handleTargetClick() {
+            if (!gameStarted) {
+                gameStarted = true;
+                clickTimes = [];
+            }
+            
+            const now = Date.now();
+            clickTimes.push(now);
+            
+            // Gestione combo
+            if (lastClickTime > 0 && (now - lastClickTime) < 1000) {
+                comboCount++;
+                updateCombo(true);
+            } else {
+                comboCount = 1;
+                updateCombo(true);
+            }
+            lastClickTime = now;
+            
+            // Aggiorna interfaccia
+            clickCounter.textContent = `Click: ${clickTimes.length}/10`;
+            progressBar.style.width = `${clickTimes.length * 10}%`;
+            
+            // Verifica avanzamento livello
+            if (clickTimes.length === 3 && currentLevel < 2) {
+                currentLevel = 2;
+                updateLevelDisplay();
+            } else if (clickTimes.length === 5 && currentLevel < 3) {
+                currentLevel = 3;
+                updateLevelDisplay();
+            } else if (clickTimes.length === 7 && currentLevel < 4) {
+                currentLevel = 4;
+                updateLevelDisplay();
+            } else if (clickTimes.length === 9 && currentLevel < 5) {
+                currentLevel = 5;
+                updateLevelDisplay();
+            }
+            
+            // Crea nuovo bersaglio
+            const config = levelConfigs[currentLevel - 1];
+            setTimeout(createTarget, config.appearDelay);
+        }
+        
+        // Gestione bersaglio mancato
+        function handleMissedTarget() {
+            comboCount = 0;
+            updateCombo(false);
+            
+            // Crea nuovo bersaglio
+            const config = levelConfigs[currentLevel - 1];
+            setTimeout(createTarget, config.appearDelay);
+        }
+        
+        // Aggiorna display livello
+        function updateLevelDisplay() {
+            currentLevelDisplay.textContent = currentLevel;
+            
+            // Effetto visivo per cambio livello
+            gameArea.style.borderColor = '#ff0';
+            setTimeout(() => {
+                gameArea.style.borderColor = '#ccc';
+            }, 500);
+        }
+        
+        // Gestione combo
+        function updateCombo(isHit) {
+            if (isHit) {
+                comboValue.textContent = comboCount;
+                
+                if (comboCount > 1) {
+                    comboCounter.style.display = 'block';
+                    
+                    if (comboCount >= 3) {
+                        comboCounter.classList.add('combo-active');
+                    } else {
+                        comboCounter.classList.remove('combo-active');
+                    }
+                } else {
+                    comboCounter.style.display = 'none';
+                }
+                
+                // Resetta timeout combo
+                if (comboTimeout) clearTimeout(comboTimeout);
+                comboTimeout = setTimeout(() => {
+                    comboCount = 0;
+                    comboCounter.style.display = 'none';
+                }, 1000);
+            } else {
+                comboCount = 0;
+                comboCounter.style.display = 'none';
+            }
+        }
+        
+        // Fine gioco
+        function endGame() {
+            // Calcola tempi
+            let totalTime = 0;
+            let averageTime = 0;
+            
+            if (clickTimes.length > 1) {
+                const timeDiffs = [];
+                for (let i = 1; i < clickTimes.length; i++) {
+                    timeDiffs.push(clickTimes[i] - clickTimes[i - 1]);
+                }
+                
+                totalTime = clickTimes[clickTimes.length - 1] - clickTimes[0];
+                averageTime = Math.round(totalTime / (clickTimes.length - 1));
+            }
+            
+            // Calcola punteggio (più basso è meglio è)
+            const score = Math.max(0, 10000 - totalTime) + (currentLevel * 2000) + (comboCount * 100);
+            
+            // Mostra risultati
+            playerInfo.innerHTML = `
+                <p>Giocatore: <strong>${playerName}</strong></p>
+                <p>Email: <strong>${playerEmail}</strong></p>
+            `;
+            
+            totalTimeDisplay.textContent = totalTime;
+            averageTimeDisplay.textContent = averageTime;
+            finalLevelDisplay.textContent = currentLevel;
+            scoreDisplay.textContent = score;
+            
+            gameScreen.classList.add('d-none');
+            resultsScreen.classList.remove('d-none');
+        }
+        
+        // Reset gioco
+        function resetGame() {
+            clickTimes = [];
+            gameStarted = false;
+            currentLevel = 1;
+            comboCount = 0;
+            lastClickTime = 0;
+            
+            clickCounter.textContent = 'Click: 0/10';
+            progressBar.style.width = '0%';
+            currentLevelDisplay.textContent = '1';
+            comboCounter.style.display = 'none';
+            
+            const existingTarget = document.querySelector('.target');
+            if (existingTarget) existingTarget.remove();
+            
+            if (targetTimeout) clearTimeout(targetTimeout);
+        }
+    </script>
+</body>
+</html>
