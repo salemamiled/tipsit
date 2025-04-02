@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeri Casuali</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #output {
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+        #outputArray {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generatore di Numeri Casuali</h1>
+    <label for="min">Min:</label>
+    <input type="number" id="min" value="1">
+    <label for="max">Max:</label>
+    <input type="number" id="max" value="100">
+    <button onclick="generaNumeri()">Genera</button>
+    <div id="output"></div>
+    <h2>Array delle medie</h2>
+    <div id="outputArray"></div>
+   
+    <script>
+        function generaNumeri() {
+            const min = parseFloat(document.getElementById('min').value);
+            const max = parseFloat(document.getElementById('max').value);
+            if (isNaN(min) || isNaN(max) || min >= max) {
+                alert("Inserisci un intervallo valido.");
+                return;
+            }
+           
+            let numeriCasuali = [];
+            let medie = [];
+            let outputText = "";
+            let sommaParziale = 0;
+            
+            
+            for (let i = 0; i < 10000; i++) {
+                
+                const num = Math.random() * (max - min) + min;
+                numeriCasuali.push(num);
+                
+                
+                outputText += num.toFixed(2) + " ";
+                
+                sommaParziale += num;
+                
+            
+                if ((i + 1) % 50 === 0) {
+                    const media = sommaParziale / 50;
+                    medie.push(media);
+                    outputText += " Media: " + media.toFixed(2) + "\n";
+                    sommaParziale = 0; 
+                }
+            }
+            
+            document.getElementById('output').textContent = outputText;
+            document.getElementById('outputArray').textContent = "Medie calcolate:\n" + medie.map(m => m.toFixed(2)).join(", ");
+        }
+    </script>
+</body>
+</html>
