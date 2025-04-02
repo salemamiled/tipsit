@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Div Sovrapposti</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .box {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            transition: background-color 0.3s;
+        }
+        
+        #box1 {
+            background-color: blue;
+        }
+        
+        #box2 {
+            background-color: yellow;
+        }
+        
+        .overlap {
+            background-color: red !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="box1" class="box"></div>
+    <div id="box2" class="box"></div>
+
+    <script>
+        const box1 = document.getElementById('box1');
+        const box2 = document.getElementById('box2');
+        const container = document.body;
+        
+        function getRandomPosition() {
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            const boxSize = 100; 
+            
+            const randomX = Math.floor(Math.random() * (containerWidth - boxSize));
+            const randomY = Math.floor(Math.random() * (containerHeight - boxSize));
+            
+            return { x: randomX, y: randomY };
+        }
+        
+        function checkOverlap() {
+            const rect1 = box1.getBoundingClientRect();
+            const rect2 = box2.getBoundingClientRect();
+            
+            const overlap = !(
+                rect1.right < rect2.left || 
+                rect1.left > rect2.right || 
+                rect1.bottom < rect2.top || 
+                rect1.top > rect2.bottom
+            );
+            
+            if (overlap) {
+                box1.classList.add('overlap');
+                box2.classList.add('overlap');
+            } else {
+                box1.classList.remove('overlap');
+                box2.classList.remove('overlap');
+            }
+        }
+        
+        function moveBoxes() {
+            const pos1 = getRandomPosition();
+            const pos2 = getRandomPosition();
+            
+            box1.style.left = pos1.x + 'px';
+            box1.style.top = pos1.y + 'px';
+            
+            box2.style.left = pos2.x + 'px';
+            box2.style.top = pos2.y + 'px';
+            
+            
+            checkOverlap();
+        }
+        
+        
+        setInterval(moveBoxes, 2000);
+        
+        
+        moveBoxes();
+    </script>
+</body>
+</html>
