@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generazione Numeri Casuali con Grafico</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .chart-container {
+            width: 100%;
+            height: 500px;
+            margin-top: 30px;
+        }
+        .info-panel {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generazione Numeri Casuali</h1>
+        
+        <div class="info-panel">
+            <h3>Informazioni:</h3>
+            <p>Numeri generati: <span id="counter">0</span></p>
+            <p>Ultimo numero: <span id="lastNumber">-</span></p>
+            <p>Distanza dal centro: <span id="distance">-</span></p>
+            <p>Ultima media (50 numeri): <span id="lastAverage">-</span></p>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Variabili globali
+        const ArrayNumeriCasuali = [];
+        const ArrayRapporti = [];
+        const mediePeriodiche = [];
+        let contatore = 0;
+        const intervalloMedia = 50;
+        let L1 = 0; // Range minimo
+        let L2 = 1; // Range massimo
+        let myChart = null;
+
+        // Funzione per generare un numero casuale tra min e max
+        function generaNumeroCasuale(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Funzione per aggiornare il pannello informativo
+        function aggiornaInfoPanel(numeroCasuale, distanza) {
+            document.getElementById('counter').textContent = contatore;
+            document.getElementById('lastNumber').textContent = numeroCasuale.toFixed(4);
+            document.getElementById('distance').textContent = distanza.toFixed(4);
+            
+            if (contatore % intervalloMedia === 0 && contatore > 0) {
+                const ultimi50 = ArrayNumeriCasuali.slice(-intervalloMedia);
+                const media = ultimi50.reduce((a, b) => a + b, 0) / ultimi50.length;
+                document.getElementById('lastAverage').textContent = media.toFixed(4);
+            }
+        }
+
+        // Funzione per inizializzare il grafico
+        function inizializzaGrafico() {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: ArrayNumeriCasuali.length}, (_, i) => i + 1),
+                    datasets: [
+                        {
+                            label: 'Numeri Casuali',
+                            data: ArrayNumeriCasuali,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Rapporti n(i)/n(i-1)',
+                            data: [null, ...ArrayRapporti],
+                            borderColor: 'rgb(255, 99, 132)',
+                            tension: 0.1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Funzione per aggiornare il grafico
+        function aggiornaGrafico() {
+            if (!myChart) {
+                inizializzaGrafico();
+            } else {
+                myChart.data.labels = Array.from({length: ArrayNumeriCasuali.length}, (_, i) => i + 1);
+                myChart.data.datasets[0].data = ArrayNumeriCasuali;
+                myChart.data.datasets[1].data = [null, ...ArrayRapporti];
+                myChart.update();
+            }
+        }
+
+        // Funzione principale eseguita ogni 500ms
+        const intervallo = setInterval(() => {
+            // 1) Genera numero casuale
+            const numeroCasuale = generaNumeroCasuale(L1, L2);
+            
+            // 2) Aggiungi all'array principale
+            ArrayNumeriCasuali.push(numeroCasuale);
+            
+            // 3) Calcola e aggiungi il rapporto n=Casuale(i)/Casuale(i-1)
+            if (ArrayNumeriCasuali.length > 1) {
+                const rapporto = numeroCasuale / ArrayNumeriCasuali[ArrayNumeriCasuali.length - 2];
+                ArrayRapporti.push(rapporto);
+            }
+            
+            // 4) Incrementa contatore e calcola media ogni 50 numeri
+            contatore++;
+            if (contatore % intervalloMedia === 0) {
+                const ultimi50 = ArrayNumeriCasuali.slice(-intervalloMedia);
+                const media = ultimi50.reduce((a, b) => a + b, 0) / ultimi50.length;
+                mediePeriodiche.push(media);
+                console.log(`Media degli ultimi ${intervalloMedia} numeri: ${media.toFixed(4)}`);
+            }
+            
+            // 5) Calcola distanza dalla metà del range
+            const metaRange = (L2 - L1) / 2;
+            const distanza = Math.abs(numeroCasuale - metaRange);
+            
+            // Aggiorna l'interfaccia utente
+            aggiornaInfoPanel(numeroCasuale, distanza);
+            aggiornaGrafico();
+            
+            // Ferma l'intervallo dopo 1000 iterazioni (opzionale)
+            if (contatore >= 1000) {
+                clearInterval(intervallo);
+                console.log("Generazione terminata dopo 1000 iterazioni");
+            }
+        }, 500); // Esegui ogni 500ms
+
+        // Inizializza il grafico quando la pagina è caricata
+        window.onload = inizializzaGrafico;
+    </script>
+</body>
+</html>
