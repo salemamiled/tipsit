@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Colore Lampo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #box {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      border: 5px solid black;
+      background-color: gray;
+      cursor: pointer;
+    }
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎯 Colore Lampo</h1>
+
+<p>Scegli il colore bersaglio: 
+  <select id="targetColor">
+    <option value="red">Rosso</option>
+    <option value="blue">Blu</option>
+    <option value="green">Verde</option>
+    <option value="yellow">Giallo</option>
+  </select>
+</p>
+
+<button id="startBtn">Inizia il Gioco</button>
+
+<div id="box"></div>
+
+<p id="info"></p>
+
+<script>
+  const colors = ["red", "blue", "green", "yellow", "orange", "purple"];
+  const reactionTimes = [];
+  let intervalId;
+  let targetColor = "red";
+  let showingTarget = false;
+  let startTime;
+
+  const box = document.getElementById("box");
+  const startBtn = document.getElementById("startBtn");
+  const targetSelector = document.getElementById("targetColor");
+  const info = document.getElementById("info");
+
+  targetSelector.addEventListener("change", () => {
+    targetColor = targetSelector.value;
+  });
+
+  startBtn.addEventListener("click", () => {
+    reactionTimes.length = 0;
+    info.textContent = "";
+    startGame();
+  });
+
+  box.addEventListener("click", () => {
+    if (showingTarget) {
+      const reaction = performance.now() - startTime;
+      reactionTimes.push(reaction);
+      info.textContent = `Hai cliccato in ${reaction.toFixed(2)} ms!`;
+      showingTarget = false;
+      box.style.backgroundColor = "gray";
+      if (reactionTimes.length >= 10) {
+        endGame();
+      }
+    }
+  });
+
+  function startGame() {
+    intervalId = setInterval(() => {
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      box.style.backgroundColor = color;
+      if (color === targetColor) {
+        showingTarget = true;
+        startTime = performance.now();
+      } else {
+        showingTarget = false;
+      }
+    }, 2000);
+  }
+
+  function endGame() {
+    clearInterval(intervalId);
+    const avg = reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length;
+    const min = Math.min(...reactionTimes);
+    const max = Math.max(...reactionTimes);
+    info.innerHTML = `
+      <h3>Risultati:</h3>
+      <p>Media: ${avg.toFixed(2)} ms</p>
+      <p>Minimo: ${min.toFixed(2)} ms</p>
+      <p>Massimo: ${max.toFixed(2)} ms</p>
+    `;
+  }
+</script>
+
+</body>
+</html>
