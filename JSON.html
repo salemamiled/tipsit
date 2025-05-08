@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reazione Pro | Gioco di Livello Elite</title>
+<!-- Google Font per stile high-tech -->
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet" />
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Orbitron', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    color: #fff;
+  }
+  h1 {
+    margin: 20px 0;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffc8;
+  }
+  #gameContainer {
+    margin-top: 30px;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle at center, #222, #000);
+    border: 4px solid #00ffc8;
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 40px #00ffc8, inset 0 0 20px #00ffc8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+  }
+  #gameContainer.ready {
+    background-color: #444;
+    box-shadow: 0 0 60px #ff00c8, inset 0 0 30px #ff00c8;
+  }
+  #gameContainer.active {
+    background-color: #00ffc8;
+    box-shadow: 0 0 80px #00ffc8, inset 0 0 40px #00ffc8;
+    transform: scale(1.02);
+  }
+  #status {
+    margin-top: 20px;
+    font-size: 1.5rem;
+    color: #fff;
+    text-shadow: 0 0 8px #fff, 0 0 15px #00ffc8;
+  }
+  #statsPanel {
+    margin-top: 30px;
+    width: 80%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffc8;
+    font-family: monospace;
+    overflow-x: auto;
+  }
+  #statsPanel h2 {
+    margin-top: 0;
+    color: #00ffc8;
+    text-align: center;
+  }
+  #stats {
+    margin-top: 10px;
+  }
+  #buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  button {
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #00ffc8, #00aebc);
+    color: #fff;
+    box-shadow: 0 0 15px #00ffc8, inset 0 0 10px #00ffc8;
+    transition: all 0.2s ease;
+  }
+  button:hover {
+    background: linear-gradient(135deg, #00aebc, #007c8c);
+    box-shadow: 0 0 25px #00ffc8, inset 0 0 15px #00ffc8;
+  }
+  #results {
+    margin-top: 40px;
+    width: 90%;
+    max-width: 800px;
+    background: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ffc8;
+    font-family: monospace;
+    overflow-x: auto;
+  }
+  #results h3 {
+    margin-top: 0;
+    color: #00ffc8;
+  }
+  /* Animazioni */
+  @keyframes pulse {
+    0% { box-shadow: 0 0 10px #00ffc8; }
+    50% { box-shadow: 0 0 20px #00ffc8; }
+    100% { box-shadow: 0 0 10px #00ffc8; }
+  }
+  .pulse {
+    animation: pulse 2s infinite;
+  }
+</style>
+</head>
+<body>
+
+<h1>Reazione Elite | Gioco di Livello Top</h1>
+
+<div id="gameContainer">PREPARATI</div>
+
+<div id="status">Premi "Start" per iniziare</div>
+
+<div id="buttons">
+  <button id="startBtn">Start</button>
+  <button id="restartBtn" disabled>Ricomincia</button>
+  <button id="saveBtn" disabled>Scarica Risultati JSON</button>
+</div>
+
+<div id="statsPanel">
+  <h2>Statistiche</h2>
+  <div id="stats"></div>
+</div>
+
+<div id="results">
+  <h3>Risultati Storici</h3>
+  <pre id="history"></pre>
+</div>
+
+<script>
+const container = document.getElementById('gameContainer');
+const status = document.getElementById('status');
+const startBtn = document.getElementById('startBtn');
+const restartBtn = document.getElementById('restartBtn');
+const saveBtn = document.getElementById('saveBtn');
+const statsDiv = document.getElementById('stats');
+const historyPre = document.getElementById('history');
+
+let reactionTimes = [];
+let gameTimeout = null;
+let startTime = 0;
+let gameState = 'waiting'; // 'waiting', 'ready', 'active', 'done'
+let gameHistory = []; // array di oggetti
+
+// Funzioni utili
+function getRandomTime(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function setStatus(text, color='white') {
+  status.innerHTML = text;
+  status.style.color = color;
+}
+
+function startGame() {
+  clearTimeout(gameTimeout);
+  reactionTimes = [];
+  statsDiv.innerHTML = '';
+  historyPre.innerText = '';
+  startBtn.disabled = true;
+  restartBtn.disabled = true;
+  saveBtn.disabled = true;
+  setStatus('Preparati...', 'white');
+
+  // Reset area
+  container.className = '';
+  container.innerHTML = 'PREPARATI';
+
+  // Timer casuale tra 2-5 secondi
+  const delay = getRandomTime(2000, 5000);
+  gameTimeout = setTimeout(() => {
+    // Cambio stato a ready
+    gameState = 'ready';
+    container.className = 'ready pulse';
+    container.innerHTML = 'FAI TAP!';
+    setStatus('Ora premi!');
+
+    startTime = performance.now();
+    gameState = 'active';
+  }, delay);
+}
+
+// Gestione clic sul container
+container.addEventListener('click', () => {
+  if (gameState === 'active') {
+    const endTime = performance.now();
+    const reactionTime = endTime - startTime;
+    reactionTimes.push(reactionTime);
+    // Salva storia
+    const record = {
+      timestamp: new Date().toISOString(),
+      reactionTime: reactionTime
+    };
+    gameHistory.push(record);
+    // Aggiorna statistiche
+    mostraStatistiche();
+
+    // Feedback visivo
+    container.className = '';
+    container.innerHTML = `Tempo: ${reactionTime.toFixed(0)} ms`;
+    setStatus('Risposta registrata!', '#00ffc8');
+    restartBtn.disabled = false;
+    saveBtn.disabled = false;
+    gameState = 'done';
+
+    // Mostra storico
+    mostraStorico();
+  }
+});
+
+function mostraStatistiche() {
+  if (reactionTimes.length === 0) return;
+  const sum = reactionTimes.reduce((a, b) => a + b, 0);
+  const avg = sum / reactionTimes.length;
+  const min = Math.min(...reactionTimes);
+  const max = Math.max(...reactionTimes);
+  statsDiv.innerHTML = `
+    <ul>
+      <li>Tentativi: ${reactionTimes.length}</li>
+      <li>Tempo medio: ${avg.toFixed(2)} ms</li>
+      <li>Minimo: ${min.toFixed(0)} ms</li>
+      <li>Massimo: ${max.toFixed(0)} ms</li>
+    </ul>
+  `;
+}
+
+function mostraStorico() {
+  if (gameHistory.length === 0) return;
+  let txt = '';
+  for (const rec of gameHistory.slice(-10).reverse()) {
+    txt += `${rec.timestamp}: ${rec.reactionTime.toFixed(0)} ms\n`;
+  }
+  historyPre.innerText = txt;
+}
+
+// Bottoni
+startBtn.onclick = startGame;
+restartBtn.onclick = () => {
+  startGame();
+};
+saveBtn.onclick = () => {
+  const dati = {
+    data: new Date().toISOString(),
+    tentativi: reactionTimes,
+    storico: [...gameHistory],
+    statistiche: {
+      media: reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length,
+      min: Math.min(...reactionTimes),
+      max: Math.max(...reactionTimes),
+      count: reactionTimes.length
+    }
+  };
+  const jsonStr = JSON.stringify(dati, null, 2);
+  const blob = new Blob([jsonStr], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `risultati_reazione_${Date.now()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setStatus('Risultati scaricati!', '#00ffc8');
+};
+
+// Animazione pulsante
+// (Puoi aggiungere effetti extra come suoni, vibrazioni, ecc.)
+
+</script>
+
+</body>
+</html>
